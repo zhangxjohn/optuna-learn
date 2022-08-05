@@ -18,18 +18,23 @@ class OptunaSearch:
         }
     optimize_direction: str, 'minimize' or 'maximize'.
     n_trials: int, default 10.
+    reward_func: function from sklearn.metrics.
     """
 
     def __init__(self,
                  model,
                  params_dict,
+                 n_trials=10,
                  optimize_direction='minimize',
-                 n_trials=10) -> None:
+                 reward_func=None,
+        ) -> None:
         self.model = model
         self.params_dict = params_dict
         self.n_trials = n_trials
         self.optimize_direction = optimize_direction
+        self.reward_func = reward_func
         self.best_estimator_ = None
+        self.best_estimator_params = None
 
     def objective(self, X, y):
 
@@ -55,10 +60,13 @@ class OptunaSearch:
             gbm.fit(train_x, train_y)
             pred_y = gbm.predict(test_x)
 
-            if self.optimize_direction == 'minimize':
-                score = mean_squared_error(test_y, pred_y, squared=False)
+            if self.reward_func is not None:
+                score = self.reward_func(test_y, pred_y, squared=False)
             else:
-                score = accuracy_score(test_y, pred_y)
+                if self.optimize_direction == 'minimize':
+                    score = mean_squared_error(test_y, pred_y, squared=False)
+                else:
+                    score = accuracy_score(test_y, pred_y)
 
             if trial.should_prune():
                 raise optuna.exceptions.TrialPruned()
@@ -70,9 +78,12 @@ class OptunaSearch:
     def fit(self, X, y, **fit_params):
         study = optuna.create_study(direction=self.optimize_direction)
         study.optimize(self.objective(X, y), n_trials=self.n_trials)
-        best_params = study.best_trial.params
-        self.best_estimator_ = self.model(**best_params)
-        self.best_estimator_.fit(X, y)
+        self.best_estimator_params = study.best_trial.params
+        self.best_estimator_ = self.model(**self.best_estimator_params)
+        try:
+            self.best_estimator_.fit(X, y, **fit_params)
+        except:
+            self.best_estimator_.fit(X, y)
         return self
 
     def predict(self, X):
