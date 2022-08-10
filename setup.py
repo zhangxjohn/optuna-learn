@@ -42,10 +42,10 @@ setup(
     python_requires=">=3.6",
     install_requires=get_install_requires(),
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Operating System :: OS Independent",
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: Apache License 2.0",
+        "Intended Audience :: Education",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
