@@ -38,7 +38,8 @@ setup(
     long_description_content_type="text/markdown",
     author="zhangxjohn",
     author_email="zhangxjohn@yeah.net",
-    packages=find_packages(exclude=("tests", "tests.*", "benchmarks")),
+    license="Apache License 2.0",
+    packages=find_packages(exclude=("docs", "tests", "tests.*")),
     python_requires=">=3.6",
     install_requires=get_install_requires(),
     classifiers=[
