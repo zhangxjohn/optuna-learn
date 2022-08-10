@@ -11,6 +11,12 @@ optuna-learn requires:
 - scikit-learn 
 - optuna 
 
+## :rocket: Installation
+
+```bash
+pip install optuna-learn
+```
+
 ## :zap: Quick Start
 
 ```python
