@@ -31,7 +31,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 opt = OptunaSearch(
         model=LGBMClassifier,
-        optimize_direction='minimize',
+        optimize_direction='maximize',
+        n_trials=100,
         params_dict={
             'n_estimators': ['categorical', 100, 200, 300, 500],
             'reg_alpha': ['float', 0.001, 10, False],
