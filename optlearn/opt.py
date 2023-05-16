@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import mean_squared_error, accuracy_score, make_scorer
 
 class OptunaSearch:
-    """
+    """Tuning hyper-parameters based on Optuna is as easy as using scikit-learn.
 
     Parameters
     ----------
